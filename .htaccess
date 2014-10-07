@@ -1,4 +1,5 @@
 <IfModule mod_rewrite.c>
-	RewriteEngine on
-	RewriteRule (.*) webroot/index.php [L]
+  RewriteEngine on
+  # in this case, our app bootstrap file is index.php
+  RewriteRule !\.(js|html|ico|gif|jpg|png|css)$ webroot/index.php
 </IfModule>

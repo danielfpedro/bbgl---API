@@ -14,8 +14,8 @@ class Dispatcher
 
 	function __construct()
 	{
-		$uri = $_SERVER['REQUEST_URI'];
-		self::Connect($uri);
+		$uri = parse_url($_SERVER['REQUEST_URI']);
+		self::Connect($uri['path']);
 	}
 
 	public static function Connect($uri, $default_route = true)
@@ -26,14 +26,14 @@ class Dispatcher
 		unset($uri_exploded[1]);
 		//Limpa os valores em branco, caso ele coloque barra no final;
 		$uri = array_filter(array_values($uri_exploded));
+
 		$total = count($uri);
 		// ISSO AQUI É GAMBI, DEPOIS VER COMO FAZ PARA FUNCIONAR EM TODOS OS SERVIDORES POSSIVEIS
-		
-
+	
 		// Default routes test
 		if ($default_route) {
 			if (!self::connectDefaultRoutes($uri)) {
-				echo 'ds 404';
+				echo 'Page not found';
 				return 'erro 404';
 			}
 		} else {
@@ -47,8 +47,16 @@ class Dispatcher
 		$total = count($uri);
 		$vars = [];
 		$controller = $uri[0];
-		$action = (!empty($uri[1]))? $uri[1]: 'index';
-
+		if (!empty($uri[1])) {
+			if (is_numeric($uri[1])) {
+				$action = 'view';
+				$vars[] = $uri[1];
+			} else {
+				$action = $uri[1];
+			}
+		} else {
+			$action = 'index';
+		}
 		if ($total > 2) {
 			$new_uri = $uri;
 			unset($new_uri[0]);
@@ -65,7 +73,7 @@ class Dispatcher
 			$controller_name = self::getControllerClassName($controller);
 			$controller_obj = new $controller_name;
 			if (method_exists($controller_obj, $action)){
-				call_user_method_array($action, $controller_obj, $vars);
+				echo call_user_method_array($action, $controller_obj, $vars);
 				return true;
 			}
 		}
