@@ -10,8 +10,8 @@ class ProfilesController extends AppController
 		parent::__construct();
 		$this->Profile = new Profile();
 	}
-	public function probablyMatches($id){
-		echo json_encode($this->Profile->getProbablyMatch($id));
+	public function probablyMatches($id, $lat, $lng){
+		echo json_encode($this->Profile->getProbablyMatch($id, $lat, $lng));
 
 	}
 

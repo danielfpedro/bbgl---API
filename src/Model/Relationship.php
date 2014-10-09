@@ -22,6 +22,23 @@ class Relationship extends AppModel
 		return $result;
 	}
 
+	public function getMatches($account_id)
+	{
+		$query = "".
+			"SELECT Profile.name, Profile.account_id, Relationship.response 
+				FROM profiles Profile
+				JOIN relationships Relationship
+					ON (Profile.account_id = Relationship.account_id)
+				WHERE Relationship.account_id2 = {$account_id}";
+		$result = mysql_query($query);
+		
+		$data = [];
+		while ($row = mysql_fetch_assoc($result)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
+
 	public function setMatch($account_id, $account_id2, $action)
 	{
 		$action = ($action == 1) ? 2 : 1;

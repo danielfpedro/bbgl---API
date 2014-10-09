@@ -21,6 +21,7 @@ class FakeData extends AppModel
 		}
 		for ($i = 0; $i < $total; $i++) {
 			do {
+				$place = $this->getRandomPlace();
 				$full_name = $this->getFullName();
 				$transaction_complete = true;
 
@@ -36,9 +37,10 @@ class FakeData extends AppModel
 					$account_id = mysql_insert_id();
 					$query = "".
 						"INSERT INTO profiles 
-							(name, birth_date, images_folder, account_id, created)
-						VALUES ('{$full_name}', '{$birth_date}', 'dda98s7da89.jpg', {$account_id}, CURRENT_TIMESTAMP)";
-
+							(name, birth_date, images_folder, account_id, lat, lng, created)
+						VALUES ('".$full_name." - ".$place['name']."', '{$birth_date}', 
+							'dda98s7da89.jpg', {$account_id}, {$place['lat']}, {$place['lng']}, 
+							CURRENT_TIMESTAMP)";
 					if (!mysql_query($query)) { // Insert profile from accuont
 						$delete = "DELETE FROM accounts WHERE id = {$account_id}";
 						$transaction_complete = false;
@@ -48,6 +50,12 @@ class FakeData extends AppModel
 				}
 			} while (!$transaction_complete);
 		}
+	}
+	public function getRandomPlace()
+	{
+		$total = count($this->places);
+		$place = $this->places[rand(0, $total - 1)];
+		return $place;
 	}
 	static function removeAcentos($string){
 		return preg_replace('/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $string));
@@ -81,6 +89,12 @@ class FakeData extends AppModel
 
 		return "{$name} {$last_name}";
 	}
+
+	public $places = [
+		['name'=> 'Volta Redonda', 'lat'=> '-22.511605470586062', 'lng'=> '-44.095001220703125'],
+		['name'=> 'Barra Mansa', 'lat'=> '-22.540781316876583', 'lng'=> '-44.181175231933594'],
+		['name'=> 'Resende', 'lat'=> '-22.47100274505545', 'lng'=> '-44.45446014404297'],
+	];
 
 	public $names = [
 			'Aarão',
