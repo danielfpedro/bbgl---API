@@ -72,6 +72,9 @@ class Dispatcher
 			require (self::getControllerPath($controller));
 			$controller_name = self::getControllerClassName($controller);
 			$controller_obj = new $controller_name;
+			require('../config/app.php');
+			$controller_obj->config = $config;
+			$controller_obj->request = $_SERVER['REQUEST_METHOD'];
 			if (method_exists($controller_obj, $action)){
 				echo call_user_method_array($action, $controller_obj, $vars);
 				return true;

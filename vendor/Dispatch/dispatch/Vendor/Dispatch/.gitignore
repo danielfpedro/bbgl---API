@@ -1,0 +1,9 @@
+*.swp
+*.log
+composer.lock
+index.php
+build/
+cgi-bin/
+node_modules/
+tests/cookiejar.txt
+vendor/
