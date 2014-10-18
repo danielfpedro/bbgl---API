@@ -4,6 +4,11 @@ require('AppModel.php');
 
 class Article extends AppModel
 {
+
+	public function sayHello()
+	{
+		echo 'hello';
+	}
 	public function get()
 	{
 		$db = new MySQL();

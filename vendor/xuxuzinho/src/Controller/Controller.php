@@ -2,19 +2,28 @@
 
 class Controller
 {
-	private $config;
-	public $get;
-	public $post;
-
 	function __construct ()
 	{
-		header('Access-Control-Allow-Origin: *');
-		header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-		header("Content-Type: application/json");	
-
-		$this->get = $_GET;
-		$this->post = $_POST;
 	}
+
+	public function loadModel($models = [])
+	{
+		foreach ($models as $key => $model) {
+			require("src/Model/{$model}.php");
+			$this->$model = new $model;
+		}
+	}
+
+	public function methodIs($methods = [])
+	{
+		foreach ($methods as $method) {
+			if ($this->method === strtoupper($method)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
 
 ?>
