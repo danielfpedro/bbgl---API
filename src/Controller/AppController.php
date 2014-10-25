@@ -1,12 +1,10 @@
 <?php
 
-require('vendor/xuxuzinho/src/Controller/Controller.php');
+App::lib('Controller', 'Controller');
 
 class AppController extends Controller
 {
-	function __construct() {
-		parent::__construct();
-	}
+
 }
 
 ?>	

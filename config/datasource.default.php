@@ -3,11 +3,11 @@
 $datasource = [
 	'default'=> [
 		'type'=> 'MySql',
-		'host'=> 'localhost',
-		'database'=> 'blog',
-		'user'=> 'root',
+		'host'=> '',
+		'database'=> '',
+		'user'=> '',
 		'password'=> '',
-		'charset'=> 'utf8'
+		'charset'=> ''
 	],
 	'another'=> [
 		'type'=> 'MySql',
