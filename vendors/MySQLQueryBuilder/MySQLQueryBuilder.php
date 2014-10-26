@@ -3,7 +3,6 @@
 class MySQLQueryBuilder {
 
 	public $query;
-	public $table;
 	public $alias;
 
 	public $error;
@@ -23,59 +22,59 @@ class MySQLQueryBuilder {
 	private $type;
 
 
-	public function save($data)
-	{
-		if (array_key_exists('id', $data)){
-			$query = $this->update($data);
-		} else {
-			$query = $this->add($data);
+	// public function save($data)
+	// {
+	// 	if (array_key_exists('id', $data)){
+	// 		$query = $this->update($data);
+	// 	} else {
+	// 		$query = $this->add($data);
 
-		}
+	// 	}
 
-		if (mysql_query($query)){
-			return true;
-		} else {
-			$this->error = mysql_error();
-			return false;
-		}	
-	}
+	// 	if (mysql_query($query)){
+	// 		return true;
+	// 	} else {
+	// 		$this->error = mysql_error();
+	// 		return false;
+	// 	}	
+	// }
 
-	private function update($data)
-	{
-		$id = $data['id'];
-		unset($data['id']);
+	// private function update($data)
+	// {
+	// 	$id = $data['id'];
+	// 	unset($data['id']);
 
-		$values = [];
-		foreach ($data as $key => $value) {
-			$value = (gettype($value) === 'string'? "'{$value}'" : $value);
+	// 	$values = [];
+	// 	foreach ($data as $key => $value) {
+	// 		$value = (gettype($value) === 'string'? "'{$value}'" : $value);
 
-			$values[] = "{$key} = {$value}";
-		}
+	// 		$values[] = "{$key} = {$value}";
+	// 	}
 
-		$values = join($values, ', ');
+	// 	$values = join($values, ', ');
 
-		$query = "UPDATE {$this->table} SET {$values} WHERE id = {$id}";
+	// 	$query = "UPDATE {$this->table} SET {$values} WHERE id = {$id}";
 
-		return $query;
-	}
-	private function add($data)
-	{
-		$fields = [];
-		$values = [];
-		foreach ($data as $key => $value) {
-			$fields[] = $key;
-			$values[] = (gettype($value) === 'string'? "'{$value}'" : $value);
-		}
+	// 	return $query;
+	// }
+	// private function add($data)
+	// {
+	// 	$fields = [];
+	// 	$values = [];
+	// 	foreach ($data as $key => $value) {
+	// 		$fields[] = $key;
+	// 		$values[] = (gettype($value) === 'string'? "'{$value}'" : $value);
+	// 	}
 
-		$fields = join($fields, ', ');
-		$values = join($values, ', ');
+	// 	$fields = join($fields, ', ');
+	// 	$values = join($values, ', ');
 
-		$query = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
+	// 	$query = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
 
-		$this->lastId = mysql_insert_id();
+	// 	$this->lastId = mysql_insert_id();
 
-		return $query;
-	}
+	// 	return $query;
+	// }
 
 	public function setTable($table, $alias = null)
 	{
@@ -181,7 +180,7 @@ class MySQLQueryBuilder {
 			}
 			$this->$type .= ' )';
 		}else {
-			$this->$type .= $this->arrangeCondition($key, $condition);
+			$this->$type .= $this->arrangeCondition($key, $condition, $type);
 		}
 	}
 	public function having($conditions)
@@ -189,7 +188,7 @@ class MySQLQueryBuilder {
 		$this->conditions($conditions, 'having');
 		return $this;
 	}
-	private function arrangeCondition($key, $value){
+	private function arrangeCondition($key, $value, $type){
 		$ex = explode(" ", trim($key));
 		if (empty($ex[1])) {
 			$sinal = "=";
@@ -198,7 +197,7 @@ class MySQLQueryBuilder {
 			$sinal = $ex[1];
 		}
 
-		$value = (gettype($value) === 'string'? "'{$value}'": $value);
+		$value = (gettype($value) === 'string' && $type != 'on'? "'{$value}'": $value);
 
 		return "{$key} {$sinal} {$value}";	
 	}
@@ -235,35 +234,40 @@ class MySQLQueryBuilder {
 		return $this;
 	}
 
-	public function first()
+	// public function first()
+	// {
+	// 	$query = mysql_query($this->query);
+	// 	if ($query === false){
+	// 		$this->error = mysql_error();
+	// 		return false;
+	// 	};
+
+	// 	$result = mysql_fetch_assoc($query);
+
+	// 	if (empty($result)) {
+	// 		return [];
+	// 	} else {
+	// 		return $result;
+	// 	}
+	// }
+
+	// public function all()
+	// {
+	// 	$query = mysql_query($this->query);
+	// 	if($query === false) {
+	// 		$this->error = mysql_error();
+	// 		return false;
+	// 	}
+	// 	$values = [];
+	// 	while ($row = mysql_fetch_assoc($query)) {
+	// 		$values[] = $row;
+	// 	}
+	// 	return $values;
+	// }
+
+	public function getQuery()
 	{
-		$query = mysql_query($this->query);
-		if ($query === false){
-			$this->error = mysql_error();
-			return false;
-		};
-
-		$result = mysql_fetch_assoc($query);
-
-		if (empty($result)) {
-			return [];
-		} else {
-			return $result;
-		}
-	}
-
-	public function all()
-	{
-		$query = mysql_query($this->query);
-		if($query === false) {
-			$this->error = mysql_error();
-			return false;
-		}
-		$values = [];
-		while ($row = mysql_fetch_assoc($query)) {
-			$values[] = $row;
-		}
-		return $values;
+		return $this->query;
 	}
 	
 }

@@ -1,7 +1,8 @@
 <?php
 
 App::src('Controller', 'AppController');
-//App::lib('Database\MySQL', 'MySQL');
+App::src('Model', 'Article');
+// App::lib('Database\MySQL', 'MySQL');
 /**
 * 
 */
@@ -10,15 +11,25 @@ class ArticlesController extends AppController
 
 	public $Article;
 
-	function __construct()
-	{
-		parent::__construct();
-		print_r(PDO::getAvailableDrivers());
-	}
-
 	public function index()
-	{
-		echo 'Index';
+	{	
+
+		$data = ['id'=> 26, 'title'=> 'kdjsjkdas'];
+		$Article = new Article;
+
+		$articles = $Article
+			->select(['title', 'comment'])
+			->join([
+				'table'=> ['comments'=> 'Comment'],
+				'conditions'=> [
+					'Comment.article_id'=> 'Article.id'
+				]
+			])
+			->all();
+
+		print_r($articles);
+
+		return 'Index';
 	}
 
 	public function view($id)
