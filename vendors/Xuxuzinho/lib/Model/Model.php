@@ -1,11 +1,14 @@
 <?php
 
 App::vendor('MySQLQueryBuilder', 'MySQLQueryBuilder');
+App::lib('Database', 'Database');
 
 class Model extends MySQLQueryBuilder
 {
 
 	public $alias;
+
+	public $primaryKey = 'id';
 
 	public $pdo;
 	public $stmt;
@@ -16,23 +19,7 @@ class Model extends MySQLQueryBuilder
 		$name = get_called_class();
 		$this->setAlias($name);
 
-		require(APP_FOLDER . 'config' . DS . 'datasource.php');
-		
-		$data = $datasource[$default];
-
-		$this->host = $data['host'];
-		$this->user = $data['user'];
-		$this->password = $data['password'];
-		$this->database = $data['database'];
-		$this->charset = $data['charset'];
-
-		try {
-			$conn = new PDO("mysql:host={$this->host};dbname={$this->database}", $this->user, $this->password);
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->pdo = $conn;
-		} catch(PDOException $e) {
-			$this->error = $e->getMessage();
-		}
+		$this->pdo = Database::connect($default);
 	}
 
 	public function create($data)
@@ -114,12 +101,12 @@ class Model extends MySQLQueryBuilder
 	public function all()
 	{
 		$this->query($this->query)->execute();
-		return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $this->stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 	public function first()
 	{
 		$this->query($this->query)->execute();
-		return $this->stmt->fetch(PDO::FETCH_ASSOC);
+		return $this->stmt->fetch(PDO::FETCH_OBJ);
 	}
 
 	public function execute()

@@ -7,8 +7,6 @@ class Article extends AppModel
 
 	public $table = 'articles';
 
-	
-
 }
 
 ?>

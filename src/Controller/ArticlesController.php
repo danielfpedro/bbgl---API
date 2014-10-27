@@ -12,22 +12,17 @@ class ArticlesController extends AppController
 	public $Article;
 
 	public function index()
-	{	
-
-		$data = ['id'=> 26, 'title'=> 'kdjsjkdas'];
+	{
 		$Article = new Article;
 
 		$articles = $Article
-			->select(['title', 'comment'])
-			->join([
-				'table'=> ['comments'=> 'Comment'],
-				'conditions'=> [
-					'Comment.article_id'=> 'Article.id'
-				]
-			])
+			->select(['title'])
+			->where(['title LIKE'=> Article::string('%copia%')])
 			->all();
 
-		print_r($articles);
+		foreach ($articles as $article) {
+			echo "{$article->title} <br>";
+		}
 
 		return 'Index';
 	}

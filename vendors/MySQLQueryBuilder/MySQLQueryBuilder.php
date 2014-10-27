@@ -3,7 +3,6 @@
 class MySQLQueryBuilder {
 
 	public $query;
-	public $alias;
 
 	public $error;
 
@@ -197,8 +196,6 @@ class MySQLQueryBuilder {
 			$sinal = $ex[1];
 		}
 
-		$value = (gettype($value) === 'string' && $type != 'on'? "'{$value}'": $value);
-
 		return "{$key} {$sinal} {$value}";	
 	}
 	public function join($values = [])
@@ -207,8 +204,10 @@ class MySQLQueryBuilder {
 		$type .= ' JOIN';
 		
 		$table = $values['table'];
-		$table = (!is_array($values['table']))? $values['table'] : key($table) . ' ' . $table[key($table)];
-		
+		if (!empty($values['alias'])) {
+			$table .= ' AS ' . $values['alias'];
+		}
+
 		if(!empty($values['conditions'])){
 			$this->conditions($values['conditions'], 'on');
 			$on = ' ON (' . $this->on . ') ';
@@ -233,41 +232,14 @@ class MySQLQueryBuilder {
 
 		return $this;
 	}
-
-	// public function first()
-	// {
-	// 	$query = mysql_query($this->query);
-	// 	if ($query === false){
-	// 		$this->error = mysql_error();
-	// 		return false;
-	// 	};
-
-	// 	$result = mysql_fetch_assoc($query);
-
-	// 	if (empty($result)) {
-	// 		return [];
-	// 	} else {
-	// 		return $result;
-	// 	}
-	// }
-
-	// public function all()
-	// {
-	// 	$query = mysql_query($this->query);
-	// 	if($query === false) {
-	// 		$this->error = mysql_error();
-	// 		return false;
-	// 	}
-	// 	$values = [];
-	// 	while ($row = mysql_fetch_assoc($query)) {
-	// 		$values[] = $row;
-	// 	}
-	// 	return $values;
-	// }
-
 	public function getQuery()
 	{
 		return $this->query;
+	}
+
+	public static function string($value)
+	{
+		return "'{$value}'";
 	}
 	
 }
