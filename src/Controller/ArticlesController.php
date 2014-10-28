@@ -1,50 +1,59 @@
 <?php
 
 App::src('Controller', 'AppController');
-App::src('Model', 'Article');
-// App::lib('Database\MySQL', 'MySQL');
-/**
-* 
-*/
+
 class ArticlesController extends AppController
 {
 
-	public $Article;
+	function __construct()
+	{
+		Parent::__construct();
+		$this->loadModel(['Article']);
+	}
 
 	public function index()
 	{
-		$Article = new Article;
-
-		$articles = $Article
-			->select(['title'])
-			->where(['title LIKE'=> Article::string('%copia%')])
-			->all();
-
-		foreach ($articles as $article) {
-			echo "{$article->title} <br>";
-		}
-
-		return 'Index';
+		$articles = $this->Article->select(['title'])->all();
+		return ['Article'=> $articles];
 	}
 
 	public function view($id)
 	{
-		return ['response'=> 'View id' . $id];
+		$query = $this
+			->Article
+				->select(['title'])
+				->where(['id'=> ':id'])
+				->bindData(['id'=> $id])
+				->all();
+
+		
+
+		return ['Article'=> $article];
 	}
 
 	public function add()
 	{
-		echo 'Add';
+		$this->Article->create($this->post);
+		$this->Article->save();
+
+		return ['message'=> 'Salvo com sucesso!'];
 	}
 
 	public function edit($id)
 	{
-		return ['response'=> 'Editando id' . $id];
+		$data = $this->put;
+		$data['id'] = $id;
+
+		$this->Article->create($data);
+		$this->Article->save();
+
+		return ['message'=> 'Editado com sucesso!'];
 	}
 
 	public function delete($id)
 	{
-		echo 'Delete id: ' . $id;
+		$this->Article->delete($id);
+		return ['message'=> 'Arquivo deletado com sucesso'];
 	}
 }
 

@@ -45,8 +45,7 @@ class Model extends MySQLQueryBuilder
 		}
 
 		$this->query($query);
-		$this->bind($this->data);
-		$this->execute();
+		$this->execute($this->data);
 	}
 	private function add()
 	{
@@ -77,42 +76,28 @@ class Model extends MySQLQueryBuilder
 		return $query;
 		
 	}
-	public function delete($table, $data)
+	public function delete($id)
 	{
-		$this->data = $data;
-		$query = "DELETE FROM {$table} WHERE id = :id";
+		$query = "DELETE FROM {$this->table} WHERE id = :id";
 
-		$this->query($query);
-		$this->bind($data);
-	}
-	public function query($query)
-	{
-		$this->stmt = $this->pdo->prepare($query);
-		return $this;
-	}
-	public function bind($data)
-	{
-		foreach ($data as $key => $value) {
-			$this->stmt->bindValue($key, $value);
-		}
-
+		$stmt = $this->pdo->prepare($query);
+		$stmt->execute(['id'=> $id]);
 	}
 
 	public function all()
 	{
-		$this->query($this->query)->execute();
-		return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+		$this->stmt = $this->pdo->prepare($this->query);
+		$stmt->execute($this->dataToBind);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 	public function first()
 	{
-		$this->query($this->query)->execute();
-		return $this->stmt->fetch(PDO::FETCH_OBJ);
+		$this->stmt = $this->pdo->prepare($this->query);
+		$this->stmt->execute($this->dataToBind);
+		return $this->stmt->fetchAll(PDO::FETCH_OBJ);
 	}
-
-	public function execute()
-	{
-		$this->stmt->execute();
-		$this->rowCount = $this->stmt->rowCount();	
+	public function bindData($data){
+		$this->dataToBind = $data;
 		return $this;
 	}
 }

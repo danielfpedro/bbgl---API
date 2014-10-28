@@ -10,7 +10,7 @@ class Database
 		$data = $datasource[$default];
 
 		try {
-			$conn = new PDO("mysql:host={$data['host']};dbname={$data['database']}", $data['user'], $data['password']);
+			$conn = new PDO("mysql:host={$data['host']};dbname={$data['database']};charset={$data['charset']}", $data['user'], $data['password']);
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			return $conn;
 		} catch(PDOException $e) {
