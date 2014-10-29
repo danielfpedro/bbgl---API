@@ -27,29 +27,25 @@ if (!empty($disp->controller) && !empty($disp->action) ){
 	$controller_file = $controller_folder . $controller_name . '.php';
 
 	if (file_exists($controller_file)) {
-		
 		App::src('Controller', $controller_name);
 		$app = new $controller_name();
-
 		if (method_exists($app, $disp->action)) {
 			if ($app->responseType) {
 				echo json_encode(call_user_func_array([$app, $disp->action], $disp->args));
+			} else {
+				echo call_user_func_array([$app, $disp->action], $disp->args);
 			}
-			
 		} else {
 			http_response_code(404);
 			echo json_encode(['error'=> 'Page Not Found']);
 		}
-
 	} else {
 		http_response_code(404);
 		echo json_encode(['error'=> 'Page Not Found']);
 	}
-
 } else {
 	http_response_code(404);
 	echo json_encode(['error'=> 'Page Not Found']);
 }
 
 exit();
-?>
