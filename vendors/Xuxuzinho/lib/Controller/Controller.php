@@ -29,6 +29,12 @@ class Controller
 		}
 	}
 
+	public static function errorResponse($error)
+	{
+		http_response_code(400);
+		return ['error' => $error];
+	}
+
 	public function loadModel($models = [])
 	{
 		foreach ($models as $key => $model) {

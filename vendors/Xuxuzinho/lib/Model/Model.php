@@ -8,18 +8,26 @@ class Model extends MySQLQueryBuilder
 
 	public $alias;
 
-	public $primaryKey = 'id';
-
+	public $dataToBind = [];
 	public $pdo;
-	public $stmt;
 	public $error;
+
+	public $data;
+
+	public $connectionValues = 'default';
 
 	function __construct ($default = 'default')
 	{
+		if (empty($this->primaryKey)) {
+			$this->primaryKey = 'id';
+		}
 		$name = get_called_class();
 		$this->setAlias($name);
+	}
 
-		$this->pdo = Database::connect($default);
+	public function setConnection($connectionValues)
+	{
+		$this->connectionValues = $connectionValues;
 	}
 
 	public function create($data)
@@ -37,20 +45,36 @@ class Model extends MySQLQueryBuilder
 	public function save()
 	{
 
-		if (array_key_exists('id', $this->data)){
-			$query = $this->update($this->data);
+		if (!empty($this->data)) {
+			if (array_key_exists($this->primaryKey, $this->data)){
+				$query = $this->update($this->data);
+			} else {
+				$query = $this->add($this->data);
+
+			}
+
+			try {
+				$pdo = Database::connect($this->connectionValues);
+				$stmt = $pdo->prepare($query);
+				$stmt->execute($this->data);
+
+				$this->rowsAffected = $stmt->rowCount();
+
+				return true;
+			} catch (PDOException $e) {
+				$this->error = $e->getMessage();
+				return false;
+			}
 		} else {
-			$query = $this->add($this->data);
-
+			$this->error = 'Nenhum dado foi passado para salvar';
+			return false;
 		}
-
-		$this->query($query);
-		$this->execute($this->data);
 	}
 	private function add()
 	{
 		$fields = [];
 		$values = [];
+
 		foreach ($this->data as $key => $value) {
 			$fields[] = $key;
 			$values[] = ":{$key}";
@@ -71,30 +95,53 @@ class Model extends MySQLQueryBuilder
 		}
 
 		$values = join($values, ', ');
-		$query = "UPDATE {$this->table} SET {$values} WHERE id = :id";
+		$query = "UPDATE {$this->table} SET {$values} WHERE {$this->primaryKey} = :{$this->primaryKey}";
 
 		return $query;
 		
 	}
 	public function delete($id)
 	{
-		$query = "DELETE FROM {$this->table} WHERE id = :id";
+		$query = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :{$this->primaryKey}";
 
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute(['id'=> $id]);
+		try {
+			$pdo = Database::connect($this->connectionValues);
+			$stmt = $pdo->prepare($query);
+			$stmt->execute([$this->primaryKey => $id]);
+			$this->rowsAffected = $stmt->rowCount();
+			return true;
+		} catch (PDOException $e) {
+			$this->error = $e->getMessage();
+			return false;
+		}
 	}
 
 	public function all()
 	{
-		$this->stmt = $this->pdo->prepare($this->query);
-		$stmt->execute($this->dataToBind);
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
+		$pdo = Database::connect($this->connectionValues);
+
+		try {
+			$stmt = $pdo->prepare($this->query);
+			$stmt->execute($this->dataToBind);
+
+			return $stmt->fetchAll(PDO::FETCH_OBJ);	
+		} catch (PDOException $e) {
+			throw $e;
+		}	
 	}
 	public function first()
 	{
-		$this->stmt = $this->pdo->prepare($this->query);
-		$this->stmt->execute($this->dataToBind);
-		return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+		try {
+			$pdo = Database::connect($this->connectionValues);
+
+			$stmt = $pdo->prepare($this->query);
+			$stmt->execute($this->dataToBind);
+
+			$fetch = $stmt->fetch(PDO::FETCH_OBJ);
+			return ($stmt->rowCount() > 0 ? $fetch : null);
+		} catch (PDOException $e) {
+			throw $e;
+		}
 	}
 	public function bindData($data){
 		$this->dataToBind = $data;

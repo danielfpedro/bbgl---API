@@ -34,23 +34,21 @@ if (!empty($disp->controller) && !empty($disp->action) ){
 		if (method_exists($app, $disp->action)) {
 			if ($app->responseType) {
 				echo json_encode(call_user_func_array([$app, $disp->action], $disp->args));
-			} else{
-
 			}
 			
 		} else {
 			http_response_code(404);
-			echo 'Page Not Found.';	
+			echo json_encode(['error'=> 'Page Not Found']);
 		}
 
 	} else {
 		http_response_code(404);
-		echo 'Page Not Found.';	
+		echo json_encode(['error'=> 'Page Not Found']);
 	}
 
 } else {
 	http_response_code(404);
-	echo 'Page Not Found.';
+	echo json_encode(['error'=> 'Page Not Found']);
 }
 
 exit();
