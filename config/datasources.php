@@ -3,10 +3,10 @@
 $datasources = [
 	'default'=> [
 		'type'=> 'mysql',
-		'host'=> 'localhost',
-		'dbname'=> 'blog',
-		'user'=> 'root',
-		'password'=> '',
+		'host'=> '177.12.161.24',
+		'dbname'=> 'bbgl',
+		'user'=> 'bbgl',
+		'password'=> '5JmzuRr7LMT4',
 		'charset'=> 'utf8'
 	],
 	'another'=> [

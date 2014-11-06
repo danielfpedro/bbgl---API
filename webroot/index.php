@@ -2,17 +2,28 @@
 session_start();
 error_reporting(E_ALL);
 
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS, HEAD");
-//header("Content-Type: application/json");
 
-require('bootstrap.php');
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD");
+    header("Access-Control-Allow-Headers', 'Authorization, X-Authorization, Origin, Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override");
+}
+// Access-Control headers are received during OPTIONS requests
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, PUT, OPTIONS");
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
-
-if ($method == 'OPTIONS'){
-	exit();
-}
+require('bootstrap.php');
 
 require(XUXUZINHO_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
@@ -47,5 +58,3 @@ if (!empty($disp->controller) && !empty($disp->action) ){
 	http_response_code(404);
 	echo json_encode(['error'=> 'Page Not Found']);
 }
-
-exit();
