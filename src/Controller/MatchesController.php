@@ -21,6 +21,18 @@ class MatchesController extends AppController
 		return $profiles;
 	}
 
+	public function getMatched()
+	{
+		$profiles = $this
+			->Profile
+			->select(['*'])
+			->orderBy(['rand()'])
+			->limit(5)
+			->all();
+
+		return $profiles;
+	}
+
 }
 
 ?>

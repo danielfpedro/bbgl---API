@@ -45,7 +45,7 @@ class QueryBuilder {
 	{
 		foreach($values as $key => $value){
 			if (is_numeric($key)){
-				$this->orderBy[] = "{$value} ASC";	
+				$this->orderBy[] = "{$value}";	
 			} else {
 				$this->orderBy[] = "{$key} {$value}";	
 			}

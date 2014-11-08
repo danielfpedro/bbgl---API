@@ -24,13 +24,14 @@ class ProfilesController extends AppController
 
 	public function edit($id)
 	{
-		return ['oi'];
-		$this->put['id'] = $id;
-		$this->Article->create($this->put);
-		if ($this->Article->save()) {
+		$data = json_decode($this->put);
+		$data->id = $id;
+		
+		$this->Profile->create($data);
+		if ($this->Profile->save()) {
 			return ['message' => 'sucesso'];
 		} else {
-			return Controller::responseError($this->Article->error);
+			return Controller::errorResponse($this->Profile->error);
 		}
 	}
 

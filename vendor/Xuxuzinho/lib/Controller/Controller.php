@@ -21,10 +21,11 @@ class Controller
 
 		switch ($this->method) {
 			case 'PUT':
-				parse_str(file_get_contents("php://input"), $this->put);
+				$this->put = file_get_contents("php://input");
 				break;
 			case 'DELETE':
-				parse_str(file_get_contents("php://input"), $this->delete);
+				//parse_str(file_get_contents("php://input"), $this->delete);
+				$this->delete = file_get_contents("php://input");
 				break;				
 		}
 	}
