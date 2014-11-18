@@ -19,6 +19,8 @@ class QueryBuilder {
 	private $offset;
 	private $limit;
 	private $having;
+
+	private $datasource = 'default';
 	
 	private $type;
 
@@ -197,7 +199,7 @@ class QueryBuilder {
 			}
 
 			try {
-				$pdo = Database::connect($this->connectionValues);
+				$pdo = Database::connect($this->datasource);
 				$stmt = $pdo->prepare($query);
 				$stmt->execute($this->data);
 
@@ -246,7 +248,7 @@ class QueryBuilder {
 		$query = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :{$this->primaryKey}";
 
 		try {
-			$pdo = Database::connect($this->connectionValues);
+			$pdo = Database::connect($this->datasource);
 			$stmt = $pdo->prepare($query);
 			$stmt->execute([$this->primaryKey => $id]);
 			$this->rowsAffected = $stmt->rowCount();
@@ -265,7 +267,7 @@ class QueryBuilder {
 	public function first()
 	{
 		try {
-			$pdo = Database::connect($this->connectionValues);
+			$pdo = Database::connect($this->datasource);
 
 			$stmt = $pdo->prepare($this->query);
 			$stmt->execute($this->dataToBind);
@@ -279,7 +281,7 @@ class QueryBuilder {
 
 	public function all()
 	{
-		$pdo = Database::connect($this->connectionValues);
+		$pdo = Database::connect($this->datasource);
 
 		try {
 			$stmt = $pdo->prepare($this->query);

@@ -2,7 +2,7 @@
 
 App::src('Model', 'AppModel');
 
-class Matche extends AppModel
+class Matches extends AppModel
 {
 	// public $table = '';
 }

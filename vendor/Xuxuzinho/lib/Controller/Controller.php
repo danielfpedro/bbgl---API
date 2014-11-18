@@ -19,12 +19,13 @@ class Controller
 		$this->get = $_GET;
 		$this->post = $_POST;
 
+		$this->http_stream = file_get_contents("php://input");
+
 		switch ($this->method) {
 			case 'PUT':
 				$this->put = file_get_contents("php://input");
 				break;
 			case 'DELETE':
-				//parse_str(file_get_contents("php://input"), $this->delete);
 				$this->delete = file_get_contents("php://input");
 				break;				
 		}
