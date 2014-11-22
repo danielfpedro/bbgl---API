@@ -3,7 +3,9 @@ session_start();
 error_reporting(E_ALL);
 
 $remove = dirname($_SERVER['SCRIPT_NAME']);
-echo str_replace($remove, '', $_SERVER['REQUEST_URI']);
+if ($remove != '/') {
+	echo str_replace($remove, '', $_SERVER['REQUEST_URI']);
+}
 exit();
 
 
