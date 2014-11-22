@@ -1,0 +1,13 @@
+{
+    "name": "Natural Born Prankst/bbgl",
+    "authors": [
+        {
+            "name": "danielfpedro",
+            "email": "danielfpedro@gmail.com"
+        }
+    ],
+    "require": {},
+	"require-dev": {
+		"heroku/heroku-buildpack-php": "*"
+	}
+}
