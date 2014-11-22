@@ -2,6 +2,7 @@
 session_start();
 //error_reporting(E_ALL);
 
+
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 
