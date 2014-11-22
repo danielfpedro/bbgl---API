@@ -49,13 +49,13 @@ if (!empty($disp->controller) && !empty($disp->action) ){
 			}
 		} else {
 			http_response_code(404);
-			echo json_encode(['error'=> 'Page Not Found']);
+			echo json_encode(['error'=> 'Page Not Found 1']);
 		}
 	} else {
 		http_response_code(404);
-		echo json_encode(['error'=> 'Page Not Found']);
+		echo json_encode(['error'=> 'Page Not Found 2']);
 	}
 } else {
 	http_response_code(404);
-	echo json_encode(['error'=> 'Page Not Found']);
+	echo json_encode(['error'=> 'Page Not Found 3']);
 }
