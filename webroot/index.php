@@ -1,8 +1,9 @@
 <?php
 session_start();
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 $method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -25,13 +26,10 @@ if ($method == 'OPTIONS') {
 
 require('bootstrap.php');
 
-$uri = $_SERVER['REQUEST_URI'];
-
 if (isset($base_url_replace)) {
 	$pattern = "/^\/{$base_url_replace}\//";
 	$uri = preg_replace($pattern, '', $uri);
 }
-
 
 require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
