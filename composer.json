@@ -7,7 +7,6 @@
         }
     ],
     "require": {
-        "monolog/monolog": "~1.7"
     },
 	"require-dev": {
 		"heroku/heroku-buildpack-php": "*"
