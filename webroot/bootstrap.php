@@ -8,12 +8,12 @@ if (!getenv('PRODUCTION')) {
 	$base_url_replace = 'bbgl';
 }
 
-$base = dirname(__FILE__);
-$base = str_replace(basename($base), '', $base);
+$app_folder = dirname(__FILE__);
+$app_folder = str_replace(basename($app_folder), '', $app_folder);
 
 define('DS', DIRECTORY_SEPARATOR);
-define('APP_FOLDER', $base);
-define('FRAMEWORK_FOLDER', $base . 'vendor' . DS . 'mayhem' . DS);
+define('APP_FOLDER', $app_folder);
+define('FRAMEWORK_FOLDER', $app_folder . 'vendor' . DS . 'mayhem' . DS);
 
 
 ?>

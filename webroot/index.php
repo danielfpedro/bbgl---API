@@ -32,7 +32,6 @@ if (isset($base_url_replace)) {
 	$uri = preg_replace($pattern, '', $uri);
 }
 
-echo $uri;
 require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
 App::lib('Dispatcher', 'Dispatcher');
@@ -40,6 +39,8 @@ App::lib('Dispatcher', 'Dispatcher');
 $disp = new Dispatcher($method, $uri);
 
 if (!empty($disp->controller) && !empty($disp->action) ){
+
+	echo 'aqui';
 
 	$controller_folder = APP_FOLDER . 'src' . DS . 'Controller' . DS;
 	$controller_name = ucfirst($disp->controller) . 'Controller';

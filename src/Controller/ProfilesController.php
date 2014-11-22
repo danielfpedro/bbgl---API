@@ -35,6 +35,10 @@ class ProfilesController extends AppController
 		}
 	}
 
+	public function oi()
+	{
+		return 'oi amigo';
+	}
 }
 
 ?>
