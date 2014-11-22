@@ -32,10 +32,9 @@ if (isset($base_url_replace)) {
 	$uri = preg_replace($pattern, '', $uri);
 }
 
-fdsfds
-exit();
+
 require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
-echo FRAMEWORK_FOLDER;
+
 exit();
 App::lib('Dispatcher', 'Dispatcher');
 
