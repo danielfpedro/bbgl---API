@@ -7,6 +7,7 @@ $datasources = [
 		'dbname'=> 'bbgl',
 		'user'=> 'bbgl',
 		'password'=> '5JmzuRr7LMT4',
+		'path' => '';
 		'charset'=> 'utf8'
 	],
 	'another'=> [
@@ -15,6 +16,7 @@ $datasources = [
 		'dbname'=> '',
 		'user'=> '',
 		'password'=> '',
+		'path' => '',
 		//'charset'=> 'utf8'
 	],
 ];
