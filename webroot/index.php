@@ -2,7 +2,8 @@
 session_start();
 error_reporting(E_ALL);
 
-echo $_SERVER['PHP_SELF'];
+$remove = dirname($_SERVER['SCRIPT_NAME']);
+echo str_replace($remove, '', $_SERVER['REQUEST_URI']);
 exit();
 
 
