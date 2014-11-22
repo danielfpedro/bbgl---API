@@ -2,7 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 
-echo $_SERVER['REQUEST_URI'];
+echo $_SERVER['PHP_SELF'];
 exit();
 
 
@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $method = $_SERVER['REQUEST_METHOD'];
 require('bootstrap.php');
 
-require(XUXUZINHO_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
+require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
 App::lib('Dispatcher', 'Dispatcher');
 
-$disp = new Dispatcher($method);
+$disp = new Dispatcher($method, $_SERVER['REQUEST_URI']);
 
 if (!empty($disp->controller) && !empty($disp->action) ){
 

@@ -7,8 +7,8 @@ $base = str_replace(basename($base), '', $base);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-define('PUBLIC_FOLDER', $base);
+$framework_name = 'mayhem';
 define('APP_FOLDER', $base);
-define('XUXUZINHO_FOLDER', $base . 'vendor' . DS . 'Xuxuzinho' . DS);
+define('FRAMEWORK_FOLDER', $base . 'vendor' . DS . 'mayhem' . DS);
 
 ?>
