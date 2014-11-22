@@ -64,6 +64,7 @@ if (!empty($disp->controller) && !empty($disp->action) ){
 		echo json_encode(['error'=> 'Page Not Found 2']);
 	}
 } else {
+	echo 'aqui else';
 	http_response_code(404);
 	echo json_encode(['error'=> 'Page Not Found 3']);
 }
