@@ -31,6 +31,8 @@ if (isset($base_url_replace)) {
 	$pattern = "/^\/{$base_url_replace}\//";
 	$uri = preg_replace($pattern, '', $uri);
 }
+
+echo $uri;
 require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
 App::lib('Dispatcher', 'Dispatcher');
