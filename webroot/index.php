@@ -2,12 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 
-$remove = dirname($_SERVER['SCRIPT_NAME']);
-if ($remove != '/') {
-	echo str_replace($remove, '', $_SERVER['REQUEST_URI']);
-}
-exit();
-
+$method = $_SERVER['REQUEST_METHOD'];
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -17,7 +12,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Headers', 'Authorization, X-Authorization, Origin, Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override");
 }
 // Access-Control headers are received during OPTIONS requests
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+if ($method == 'OPTIONS') {
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, PUT, OPTIONS");
@@ -28,14 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
 require('bootstrap.php');
 
+$uri = $_SERVER['REQUEST_URI'];
+
+if (isset($base_url_replace)) {
+	$pattern = "/^\/{$base_url_replace}\//";
+	$uri = preg_replace($pattern, '', $uri);
+}
 require(FRAMEWORK_FOLDER . 'lib' . DS . 'App' . DS . 'App.php');
 
 App::lib('Dispatcher', 'Dispatcher');
 
-$disp = new Dispatcher($method, $_SERVER['REQUEST_URI']);
+$disp = new Dispatcher($method, $uri);
 
 if (!empty($disp->controller) && !empty($disp->action) ){
 
