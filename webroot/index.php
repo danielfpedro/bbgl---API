@@ -2,6 +2,8 @@
 session_start();
 error_reporting(E_ALL);
 
+$_SERVER['REQUEST_URI'];
+exit();
 
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
